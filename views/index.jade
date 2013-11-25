@@ -1,0 +1,16 @@
+extends layout
+
+block content
+	include module/header
+	main
+		div.container
+			p welcome to #{title}
+			ul.products-grid.cf
+				- for (var coko in items)
+					li
+						a(href=items[coko].link)
+							img(src=items[coko].source, alt=items[coko].alter)
+						div.addToCart
+							a(href='#') Add to Cart
+	include module/footer
+	include module/script
