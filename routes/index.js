@@ -14,4 +14,16 @@ exports.mapRoute = function(app, prefix) {
 
 	// index
 	app.get(prefix, prefixObj.index);
+
+	// create account
+	app.get(prefix + 'signup', prefixObj.signup);
+	app.post(prefix + 'signup', function(req, res) {
+		prefixObj.addNewAccount(req, function(e) {
+			if (e) {
+				res.send(e, 400);
+			} else {
+				res.send('ok', 200);
+			}
+		});
+	});
 }

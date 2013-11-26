@@ -1,0 +1,20 @@
+extends layout
+
+block content
+	include module/header
+	main.main
+		div.container
+			h1 Join Rainbow
+			form#createAcFm(method="post", action="/signup")
+				h2 Create your personal account
+				label(for="userName") Username
+				input#userName(type="text", name="userName")
+				label(for="email") Email Address
+				input#email(type="email", name="email")
+				label(for="password") Password
+				input#password(type="password", name="password")
+				label(for="cmPassword") Confirm your password
+				input#cmPassword(type="password", name="cmPassword")
+				button(type="submit") Create an account
+	include module/footer
+	include module/script
