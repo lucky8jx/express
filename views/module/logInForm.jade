@@ -1,8 +1,8 @@
-form(id="logInForm", method="post", action="/logoIn")
+form(id="logInForm", method="post", action="/signin")
 	label(for="userName") UserName:
-	input(id="userName", type="text", placeholder="UserName or Email")
+	input(id="userName", type="text", name="userName", placeholder="UserName or Email")
 	label(for="password") Password:
 		a.forgetPassword(href="#") (forgot password)
-	input(id="password", type="password", placeholder="Number and letter")
+	input(id="password", type="password", name="password", placeholder="Number and letter")
 	button(type="submit") Log In
 	a.newAccount(href="/signup") Create a new account

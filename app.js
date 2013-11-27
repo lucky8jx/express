@@ -20,6 +20,10 @@ app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
+app.use(express.bodyParser());
+app.use(express.cookieParser());
+app.use(express.cookieSession({secret: 'super-duper-secret-secret'}));
+
 app.use(express.methodOverride());
 app.use(app.router);
 app.use(stylus.middleware({
@@ -36,15 +40,8 @@ if ('development' == app.get('env')) {
 // app.get('/', routes.index);
 // app.get('/users', user.list);
 
-var prefixes = [];
-
-if (prefixes.length) {
-	prefixes.forEach(function(prefix) {
-		routes.mapRoute(app, prefix);
-	});
-} else {
-	routes.mapRoute(app, '');
-}
+require('./db');
+routes.mapRoute(app);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

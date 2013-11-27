@@ -7,9 +7,15 @@ header.header
 					a(href='#') About us
 				li
 					a(href='#') Contact us
-				li
-					a.logIn(href='#') Log in
-					include logInForm
+				if login == true
+					li
+						a(href="#")= user.userName
+					li
+						a.logOut(href="#") Sign Out
+				else
+					li
+						a.logIn(href="#") Sign In
+						include logInForm
 		h1.logo
 			a(href='#') #{title}
 		include searchForm

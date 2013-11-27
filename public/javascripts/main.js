@@ -47,10 +47,31 @@
 				e.preventDefault();
 				show();
 			});
+			$('.logOut').on('click', function(e) {
+				e.preventDefault();
+				attemptLogOut();
+			});
 		}
 		// show 
 		function show() {
 			logInForm.stop()[config.effect](config.speed);
+		}
+		// attemptLogOut
+		function attemptLogOut() {
+			$.ajax({
+				url: '/signup',
+				type: 'POST',
+				data: {
+					logout: true
+				},
+				success: function() {
+					console.log('ok');
+					// window.location.href = 'localhost:3000/';
+				},
+				error: function(jqXHR) {
+					console.log(jqXHR);
+				}
+			});
 		}
 		return {
 			// private method(init) as public one
