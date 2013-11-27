@@ -1,0 +1,15 @@
+extends layout
+
+block content
+	include module/header
+	main.main
+		div.container
+			form#createAcFm(method="post", action="/signin")
+				h2= title
+				label(for="userName") Username
+				input#userName(type="text", name="userName")
+				label(for="password") Password
+				input#password(type="password", name="password")
+				button(type="submit") Sign In
+	include module/footer
+	include module/script

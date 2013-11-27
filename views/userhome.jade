@@ -1,0 +1,13 @@
+extends layout
+
+block content
+	include module/header
+	main.main
+		div.container
+			h1= title
+			div.user
+				dl
+					dt= user.userName
+					dd= user.emailAddress
+	include module/footer
+	include module/script
