@@ -7,11 +7,11 @@ header.header
 					a(href='#') About us
 				li
 					a(href='#') Contact us
-				if login == true
+				if logflag == true
 					li
 						a(href="#")= user.userName
 					li
-						a.logOut(href="#") Sign Out
+						a.logOut(href="/signout") Sign Out
 				else
 					li
 						a.logIn(href="#") Sign In

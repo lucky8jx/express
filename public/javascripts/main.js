@@ -47,10 +47,10 @@
 				e.preventDefault();
 				show();
 			});
-			$('.logOut').on('click', function(e) {
-				e.preventDefault();
-				attemptLogOut();
-			});
+			// $('.logOut').on('click', function(e) {
+			// 	e.preventDefault();
+			// 	attemptLogOut();
+			// });
 		}
 		// show 
 		function show() {

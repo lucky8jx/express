@@ -1,10 +1,56 @@
+/*
+ * CSS3
+ */
 
 border-radius()
 	-webkit-border-radius arguments
 	border-radius arguments
+
 box-shadow()
 	-webkit-box-shadow arguments
 	box-shadow arguments
+
+text-shadow()
+	-ms-text-shadow arguments
+	text-shadow arguments
+
 transition()
 	-webkit-transition arguments
 	transition arguments
+
+// ================================================================ 
+// Gradient
+// ================================================================
+
+// vertical
+
+vertical($start, $middle, $end)
+	background $start /* Old browsers */
+	background -moz-linear-gradient(top, $start 0%, $middle 50%, $end 100%) /* FF3.6+ */
+	background -webkit-gradient(linear, left top, left bottom, color-stop(0%, $start), color-stop(50%, $middle), color-stop(100%, $end)) /* Chrome, Safari4+ */
+	background -webkit-linear-gradient(top, $start 0%, $middle 50%, $end 100%) /* Chrome10+, Safari5.1+ */
+	background -o-linear-gradient(top, $start 0%, $middle 50%, $end 100%) /* Opera 11.10+ */
+	background -ms-linear-gradient(top, $start 0%, $middle 50%, $end 100%) /* IE10+*/
+	background linear-gradient(to bottom, $start 0%, $middle 50%, $end 100%) /* W3C */
+
+// horizontal
+
+horizontal($start, $middle, $end)
+	background $start /* Old browsers */
+	background -moz-linear-gradient(left, $start 0%, $middle 50%, $end 100%) /* FF3.6+ */
+	background -webkit-gradient(linear, left top, right top, color-stop(0%, $start), color-stop(50%, $middle), color-stop(100%, $end)) /* Chrome, Safari4+ */
+	background -webkit-linear-gradient(left, $start 0%, $middle 50%, $end 100%) /* Chrome10+, Safari5.1+ */
+	background -o-linear-gradient(left, $start 0%, $middle 50%, $end 100%) /* Opera 11.10+ */
+	background -ms-linear-gradient(left, $start 0%, $middle 50%, $end 100%) /* IE10+*/
+	background linear-gradient(to right, $start 0%, $middle 50%, $end 100%) /* W3C */
+
+// radial
+
+radial($start, $middle, $end)
+	background $start /* Old browsers */
+	background -moz-radial-gradient(center, ellipse cover, $start 0%, $middle 50%, $end 100%) /* FF3.6+ */
+	background -webkit-gradient(radial, center center, 0px, center center, color-stop(0%, $start), color-stop(50%, $middle), color-stop(100%, $end)) /* Chrome, Safari4+ */
+	background -webkit-radial-gradient(center, ellipse cover, $start 0%, $middle 50%, $end 100%) /* Chrome10+, Safari5.1+ */
+	background -o-radial-gradient(center, ellipse cover, $start 0%, $middle 50%, $end 100%) /* Opera 11.10+ */
+	background -ms-radial-gradient(center, ellipse cover, $start 0%, $middle 50%, $end 100%) /* IE10+*/
+	background radial-gradient(ellipse at center, $start 0%, $middle 50%, $end 100%) /* W3C */

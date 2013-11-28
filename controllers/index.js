@@ -3,10 +3,10 @@
 exports.index = function(req, res) {
 	// console.log(req.session.user, 'aaaaa');
 	// req.session.user = null;
-	if (req.signedCookies.user == null) {
+	if (req.session.user === null) {
 		res.render('index', {
 			title: 'Rainbow',
-			login: false,
+			logflag: false,
 			items: {
 				item1: {
 					link: '#',

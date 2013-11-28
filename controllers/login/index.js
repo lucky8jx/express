@@ -9,18 +9,15 @@ exports.signin = function(req, res) {
 };
 
 exports.signout = function(req, res) {
-	if (req.param('logout') == 'true') {
-		console.log(req);
-		res.clearCookie('userName');
-		res.clearCookie('password');
-		req.session.destroy(function(err) {
-			// res.send('ok',200);
-			res.redirect('/');
-		});
-	}	
+	// console.log(req);
+	res.clearCookie('userName');
+	res.clearCookie('password');
+	req.session.user = null;
+	res.redirect('/');
 };
 
 // create a new account
+
 exports.signup = function(req, res) {
 	res.render('signup',{
 		title: 'Sign up'
@@ -51,24 +48,22 @@ exports.addNewAccount = function(req, callback) {
 	});
 };
 
-exports.manualLogin = function(user, password, cb) {
-	// console.log(user);	
+exports.manualLogin = function(user, password, cb) {	
 	Accounts.findOne({userName: user}, function(err, obj) {
-		if (obj == null) {
+		if (obj === null) {
 			cb('user-not-found');
 		} else {
 			validatePassword(password, obj.password, function(err, res) {
-				// console.log(obj.password);
 				if (res) {
 					cb(null, obj);
 				} else {
 					cb('invalid-password');
 				}
 			});
-			// console.log(obj);
 		}
 	});
 };
+
 
 /* account lookup methods */
 
@@ -89,7 +84,7 @@ exports.deleteAccount = function(id, cb) {
 
 exports.delAllRecords = function(cb) {
 	Accounts.remove({}, cb);
-}
+};
 
 /* private encryption & validation methods */
 
@@ -102,21 +97,21 @@ var generateSalt = function()
 		salt += set[p];
 	}
 	return salt;
-}
+};
 
 var md5 = function(str) {
 	return crypto.createHash('md5').update(str).digest('hex');
-}
+};
 
 var saltAndHash = function(pass, callback)
 {
 	var salt = generateSalt();
 	callback(salt + md5(pass + salt));
-}
+};
 
 var validatePassword = function(plainPass, hashedPass, callback)
 {
 	var salt = hashedPass.substr(0, 10);
 	var validHash = salt + md5(plainPass + salt);
 	callback(null, hashedPass === validHash);
-}
+};
