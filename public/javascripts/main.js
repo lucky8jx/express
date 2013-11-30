@@ -47,39 +47,62 @@
 				e.preventDefault();
 				show();
 			});
-			// $('.logOut').on('click', function(e) {
-			// 	e.preventDefault();
-			// 	attemptLogOut();
-			// });
 		}
 		// show 
 		function show() {
 			logInForm.stop()[config.effect](config.speed);
-		}
-		// attemptLogOut
-		function attemptLogOut() {
-			$.ajax({
-				url: '/signup',
-				type: 'POST',
-				data: {
-					logout: true
-				},
-				success: function() {
-					console.log('ok');
-					// window.location.href = 'localhost:3000/';
-				},
-				error: function(jqXHR) {
-					console.log(jqXHR);
-				}
-			});
 		}
 		return {
 			// private method(init) as public one
 			init: init
 		};
 	}());
+
+	APP.namespace('signUp.validateUsername');
+	APP.signUp.validateUsername = (function() {
+		var usernameSignUp = $('#usernameSignUp');
+		// init function
+		function init() {
+			usernameSignUp.on('blur', function() {
+				var inputUsername = usernameSignUp.val();
+				if (isInLengthRange(inputUsername)) {
+					isExist(inputUsername);
+				}
+			});
+		}
+		// validate the length of user name
+		function isInLengthRange(inputUsername) {
+			var max = inputUsername.length;
+			if (max < 3 || max > 16) {
+				usernameSignUp.removeClass()
+					.addClass('userUnavailable')
+					.prev('label').removeClass()
+						.addClass('userUnavailable');
+				return false;
+			} else {
+				usernameSignUp.removeClass()
+					.prev('label').removeClass();
+				return true;
+			}
+		}
+		// validate the Existance of user name
+		function isExist(inputUsername) {
+			$.post('/validateUsername', {username: inputUsername}, function(data) {
+				if (data === "userExist") {
+					usernameSignUp.addClass(data)
+						.prev('label').addClass(data);
+				} else if (data === "userAvailable") {
+					usernameSignUp.addClass(data);
+				}
+			});
+		}
+		return {
+			init: init
+		};
+	})();
 	APP.logIn.init({
 		effect: 'fadeToggle',
 		speed: 500
 	});
+	APP.signUp.validateUsername.init();
 })(jQuery);

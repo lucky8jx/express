@@ -1,0 +1,17 @@
+extends layout
+
+block content
+	include module/header
+	main.main
+		div.container
+			section.chPass
+				h1 Change Password
+				form#changePass(method="post", action="/account")
+					input(type="password" placeholder="Old Password" name="oldPassword")
+					input(type="password" placeholder="New Password" name="newPassword")
+					input(type="password" placeholder="Confirm New Password" name="confirmNewPass")
+					button(type="submit") Update password
+					a(href="#") I forgot my password
+			section.delAccount
+				h1 Delete Account
+				a(href="/delete") Delete Your Account

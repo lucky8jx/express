@@ -8,27 +8,41 @@ exports.index = function(req, res){
 };
 
 exports.mapRoute = function(app) {
-	var index = require('../controllers');
-	app.get('/', index.index);
 
+	var index = require('../controllers');
 	var	login = require('../controllers/login');
+
+	app.get('/', function(req, res) {
+		if (req.cookies.username === undefined || req.cookies.password === undefined) {
+			index.mainHome(req, res);
+		} else {
+			login.autoLogin(req.cookies.username, req.cookies.password, function(doc) {
+				if (doc !== null) {
+					req.session.user = doc;
+					index.userHome(req, res);
+					console.log(doc, 'bbb');
+				} else {
+					index.mainHome(req, res);
+				}
+			});
+		}
+	});
 	app.get('/signin', login.signin);
-	app.post('/signin', function(req, res) {
-		login.manualLogin(req.param('userName'), req.param('password'), function(err, obj) {
-			if (!obj) {
+	app.post('/', function(req, res) {
+		login.manualLogin(req.param('username'), req.param('password'), function(err, doc) {
+			if (!doc) {
 				res.send(err, 400);
 			} else {
-				req.session.user = obj;
+				req.session.user = doc;
 				if (req.param('remenber-me') == 'true') {
-					res.cookie('userName', obj.userName, { maxAge: 900000});
-					res.cookie('password', obj.password, { maxAge: 900000});
+					res.cookie('username', doc.username, { maxAge: 900000});
+					res.cookie('password', doc.password, { maxAge: 900000});
 				}
 				// res.send(obj, 200);
-				res.render('userhome', {
-					title: "User's homepage",
-					logflag: true,
-					user: obj
-				});
+				if ( req.session.user.flag === false) {
+					req.session.user.flag = true;
+				}
+				index.userHome(req, res);
 			}
 		});
 	});
@@ -72,5 +86,19 @@ exports.mapRoute = function(app) {
 			res.redirect('/print');
 		});
 	});
+
+	// Update passord or username,and delete account
+
+	app.get('/setting', function(req, res) {
+		console.log(req.session.user.flag);
+		res.render('setting', {
+			title: 'Account Setting',
+			logflag: req.session.user.flag,
+			user: req.session.user
+		});
+	});
+	app.post('/account', login.changePass);
+
+	app.post('/validateUsername', login.validateUsername);
 	
 };

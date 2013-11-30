@@ -3,13 +3,11 @@ header.header
 		div.cf
 			p.wel-message Welcome to My WebStore!
 			ul.topLink.cf
-				li
-					a(href='#') About us
-				li
-					a(href='#') Contact us
 				if logflag == true
 					li
-						a(href="#")= user.userName
+						a(href="#")= user.username
+					li
+						a(href="/setting") Setting
 					li
 						a.logOut(href="/signout") Sign Out
 				else

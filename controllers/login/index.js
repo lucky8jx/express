@@ -10,7 +10,7 @@ exports.signin = function(req, res) {
 
 exports.signout = function(req, res) {
 	// console.log(req);
-	res.clearCookie('userName');
+	res.clearCookie('username');
 	res.clearCookie('password');
 	req.session.user = null;
 	res.redirect('/');
@@ -26,11 +26,12 @@ exports.signup = function(req, res) {
 
 exports.addNewAccount = function(req, callback) {
 	var newData = new Accounts({
-			userName: req.param('userName'),
+			username: req.param('username'),
 			emailAddress: req.param('email'),
-			password: req.param('password')
+			password: req.param('password'),
+			flag: true
 		});
-	Accounts.findOne({userName: newData.userName}, function(e, o) {
+	Accounts.findOne({username: newData.username}, function(e, o) {
 		if (o) {
 			callback('username-taken');
 		} else {
@@ -48,8 +49,20 @@ exports.addNewAccount = function(req, callback) {
 	});
 };
 
+exports.autoLogin = function(user, pass, cb) {
+	Accounts.findOne({username: user}, function(err, doc) {
+		if (err) {
+			throw err;
+		} else if (doc) {
+			doc.password === pass ? cb(doc) : cb(null);
+		} else {
+			cb(null);
+		}
+	});
+};
+
 exports.manualLogin = function(user, password, cb) {	
-	Accounts.findOne({userName: user}, function(err, obj) {
+	Accounts.findOne({username: user}, function(err, obj) {
 		if (obj === null) {
 			cb('user-not-found');
 		} else {
@@ -84,6 +97,46 @@ exports.deleteAccount = function(id, cb) {
 
 exports.delAllRecords = function(cb) {
 	Accounts.remove({}, cb);
+};
+
+exports.changePass = function(req, res) {
+	var newPass = req.param('newPassword'),
+		oldPass = req.param('oldPassword'),
+		currentUser = req.session.user.username;
+
+	Accounts.findOne({username: currentUser}, function(err, doc) {
+		if (err) {
+			throw err;
+		}
+		validatePassword(oldPass, doc.password, function(err, flag) {
+			if (err) {
+				throw err;
+			} else if (flag) {
+				saltAndHash(newPass, function(hash) {
+					doc.password = hash;
+					doc.save(function() {
+						res.redirect('/setting');
+					});
+				});
+			}
+		});
+	});
+};
+
+/* validations */
+
+exports.validateUsername = function(req, res) {
+	var vUsername = req.param('username');
+	console.log(vUsername,"aaaa");
+	Accounts.findOne({username: vUsername}, function(err, doc) {
+		if (err) {
+			throw err;
+		} else if (doc) {
+			res.send("userExist");
+		} else {
+			res.send("userAvailable");
+		}
+	});
 };
 
 /* private encryption & validation methods */

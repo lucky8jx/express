@@ -1,9 +1,10 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;	
 var Accounts = new Schema({
-	userName: String,
+	username: String,
 	emailAddress: String,
-	password: String
+	password: String,
+	flag: Boolean
 });
 var Accounts = mongoose.model("Accounts", Accounts);
 

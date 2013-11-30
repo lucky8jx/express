@@ -3,6 +3,7 @@
 	& > h2
 		font-size 16px
 	& > label
+		position relative
 		font-size 13px
 		font-weight bold
 		color rgb(51, 51, 51)
@@ -22,3 +23,26 @@
 		border 1px solid rgb(74, 153, 62)
 		background-color rgb(121, 216, 88)
 		border-radius(3px)
+	> .userExist
+		// border-color red
+		&:before
+			content "(The user is taken)"
+	> .userUnavailable
+		&:before
+			content "(The length should be lt 16 and gt 3)"
+	& > .userAvailable
+		border-color green
+	> .userExist
+	> .userUnavailable
+		border-color red
+		&:before
+			// content "(The length should be lt 16 and gt 3)"
+			position absolute
+			top 2px
+			left 65px
+			display block
+			color red
+			font-size 9px
+			width 200px
+			// height 5px
+			// background-color black
