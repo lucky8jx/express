@@ -58,43 +58,102 @@
 		};
 	}());
 
-	APP.namespace('signUp.validateUsername');
-	APP.signUp.validateUsername = (function() {
-		var usernameSignUp = $('#usernameSignUp');
+	APP.namespace('signUp.validate');
+	APP.signUp.validate = (function() {
+		var usernameSignUp = $('#usernameSignUp'),
+			emailSignUp = $('#emailSignUp'),
+			passSignUp = $('#passwordSignUp'),
+			cmPassSignUp = $('#cmPasswordSignUp'),
+			button = $('#buttonSignUp');
+		var flag = true;
 		// init function
-		function init() {
+		function init() {		
 			usernameSignUp.on('blur', function() {
 				var inputUsername = usernameSignUp.val();
-				if (isInLengthRange(inputUsername)) {
-					isExist(inputUsername);
-				}
+				validateUsername(inputUsername, isTokenUsername);
 			});
+			emailSignUp.on('blur', function() {
+				var inputEmail = emailSignUp.val();
+				validateEmail(inputEmail, isTokenEmail);
+			});
+			passSignUp.on('blur', function() {
+				var inputPass = passSignUp.val();
+				validatePass(inputPass);
+			});
+			cmPassSignUp.on('blur', function() {
+				var inputCmPass = cmPassSignUp.val(),
+					inputPass = passSignUp.val();
+				validateCmPass(inputPass, inputCmPass);
+			});			
 		}
+		// false or true
 		// validate the length of user name
-		function isInLengthRange(inputUsername) {
-			var max = inputUsername.length;
-			if (max < 3 || max > 16) {
+		function validateUsername(inputUsername, cb) {
+			var pattern = /^[0-9A-Za-z!@#\$%]{3,16}$/;
+			if (!pattern.test(inputUsername)) {
 				usernameSignUp.removeClass()
-					.addClass('userUnavailable')
-					.prev('label').removeClass()
-						.addClass('userUnavailable');
-				return false;
+					.addClass('unAvailable')
+					.prev('label').removeClass();
 			} else {
 				usernameSignUp.removeClass()
 					.prev('label').removeClass();
-				return true;
+				cb(inputUsername, isToken);
 			}
 		}
 		// validate the Existance of user name
-		function isExist(inputUsername) {
+		function isTokenUsername(inputUsername, cb) {
 			$.post('/validateUsername', {username: inputUsername}, function(data) {
-				if (data === "userExist") {
-					usernameSignUp.addClass(data)
-						.prev('label').addClass(data);
-				} else if (data === "userAvailable") {
-					usernameSignUp.addClass(data);
-				}
+				cb(data, usernameSignUp);
 			});
+		}
+		// email
+		function validateEmail(inputEmail, cb) {
+			var pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+			if (pattern.test(inputEmail)) {
+				emailSignUp.removeClass()
+					.prev('label').removeClass();
+				cb(inputEmail, isToken);
+			} else {
+				emailSignUp.removeClass()
+					.addClass('unAvailable')
+					.prev('label').removeClass();
+			}
+		}
+		// email is token
+		function isTokenEmail(inputEmail, cb) {
+			$.post('/validateEmail', {email: inputEmail}, function(data) {
+				cb(data, emailSignUp);
+			});
+		}
+		// is token
+		function isToken(data, obj) {
+			if (data === "token") {
+				obj.addClass(data)
+					.prev('label').addClass(data);
+			} else if (data === "available") {
+				obj.addClass(data);
+			}
+		}
+		// validate password
+		function validatePass(inputPass) {
+			var pattern = /^[0-9A-Za-z]{6,12}$/;
+			if (pattern.test(inputPass)) {
+				passSignUp.removeClass()
+					.addClass('available');
+			} else {
+				passSignUp.removeClass()
+					.addClass('unAvailable');
+			}
+		}
+		function validateCmPass(pass, cmPass) {
+			// console.log(cmPass);
+			if( pass === cmPass && cmPass !== '') {
+				cmPassSignUp.removeClass()
+					.addClass('available');
+			} else {
+				cmPassSignUp.removeClass()
+					.addClass('unAvailable');
+			}
 		}
 		return {
 			init: init
@@ -104,5 +163,5 @@
 		effect: 'fadeToggle',
 		speed: 500
 	});
-	APP.signUp.validateUsername.init();
+	APP.signUp.validate.init();
 })(jQuery);

@@ -100,5 +100,7 @@ exports.mapRoute = function(app) {
 	app.post('/account', login.changePass);
 
 	app.post('/validateUsername', login.validateUsername);
+
+	app.post('/validateEmail', login.validateEmail);
 	
 };

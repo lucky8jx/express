@@ -9,12 +9,16 @@ block content
 				h2 Create your personal account
 				label(for="username") Username
 				input#usernameSignUp(type="text", name="username")
+				p Should lt 17 and gt 2, include letter or number 
 				label(for="email") Email Address
-				input#email(type="email", name="email")
+				input#emailSignUp(type="email", name="email")
+				p Should be email, form should be right
 				label(for="password") Password
-				input#password(type="password", name="password")
+				input#passwordSignUp(type="password", name="password")
+				p Should lt 13 and gt 7, include letter or number
 				label(for="cmPassword") Confirm your password
-				input#cmPassword(type="password", name="cmPassword")
-				button(type="submit") Create an account
+				input#cmPasswordSignUp(type="password", name="cmPassword")
+				p Should equal the password above
+				button#buttonSignUp(type="submit") Create an account
 	include module/footer
 	include module/script

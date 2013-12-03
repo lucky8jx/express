@@ -132,9 +132,22 @@ exports.validateUsername = function(req, res) {
 		if (err) {
 			throw err;
 		} else if (doc) {
-			res.send("userExist");
+			res.send("token");
 		} else {
-			res.send("userAvailable");
+			res.send("available");
+		}
+	});
+};
+
+exports.validateEmail = function(req, res) {
+	var vEmail = req.param('email');
+	Accounts.findOne({emailAddress: vEmail}, function(err, doc) {
+		if (err) {
+			throw err;
+		} else if (doc) {
+			res.send("token");
+		} else {
+			res.send("available");
 		}
 	});
 };
