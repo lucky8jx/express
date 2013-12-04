@@ -1,6 +1,11 @@
 var crypto = require('crypto');
-var mongoose = require('mongoose');
-var Accounts = mongoose.model('Accounts');
+// var mongoose = require('mongoose');
+// var Accounts = mongoose.model('Accounts');
+// var Accounts = require('../../mongodb/model');
+var model = require('../../mongodb/model');
+var Accounts = model.Accounts;
+// console.log(Accounts);
+// mongoose.connect('mongodb://localhost/rainbow');
 
 exports.signin = function(req, res) {
 	res.render('signin', {
@@ -31,6 +36,7 @@ exports.addNewAccount = function(req, callback) {
 			password: req.param('password'),
 			flag: true
 		});
+	console.log(newData);
 	Accounts.findOne({username: newData.username}, function(e, o) {
 		if (o) {
 			callback('username-taken');
@@ -127,7 +133,7 @@ exports.changePass = function(req, res) {
 
 exports.validateUsername = function(req, res) {
 	var vUsername = req.param('username');
-	console.log(vUsername,"aaaa");
+	// console.log(Accounts,"aaaa");
 	Accounts.findOne({username: vUsername}, function(err, doc) {
 		if (err) {
 			throw err;
@@ -154,8 +160,7 @@ exports.validateEmail = function(req, res) {
 
 /* private encryption & validation methods */
 
-var generateSalt = function()
-{
+var generateSalt = function() {
 	var set = '0123456789abcdefghijklmnopqurstuvwxyzABCDEFGHIJKLMNOPQURSTUVWXYZ';
 	var salt = '';
 	for (var i = 0; i < 10; i++) {
@@ -169,14 +174,12 @@ var md5 = function(str) {
 	return crypto.createHash('md5').update(str).digest('hex');
 };
 
-var saltAndHash = function(pass, callback)
-{
+var saltAndHash = function(pass, callback) {
 	var salt = generateSalt();
 	callback(salt + md5(pass + salt));
 };
 
-var validatePassword = function(plainPass, hashedPass, callback)
-{
+var validatePassword = function(plainPass, hashedPass, callback) {
 	var salt = hashedPass.substr(0, 10);
 	var validHash = salt + md5(plainPass + salt);
 	callback(null, hashedPass === validHash);

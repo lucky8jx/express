@@ -1,5 +1,5 @@
 {
-  "name": "application-name",
+  "name": "rainbow",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -9,5 +9,10 @@
     "express": "3.4.4",
     "jade": "*",
     "mongoose": "*"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.2",
+    "grunt-contrib-cssmin": "~0.7.0",
+    "grunt-contrib-uglify": "~0.2.7"
   }
 }

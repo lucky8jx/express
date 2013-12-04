@@ -20,7 +20,7 @@ app.use(express.favicon());
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
-app.use(express.bodyParser());
+// app.use(express.bodyParser());
 app.use(express.cookieParser());
 app.use(express.cookieSession({secret: 'super-duper-secret-secret'}));
 
@@ -40,7 +40,8 @@ if ('development' == app.get('env')) {
 // app.get('/', routes.index);
 // app.get('/users', user.list);
 
-require('./db');
+// require('./db');
+require('./mongodb');
 routes.mapRoute(app);
 
 http.createServer(app).listen(app.get('port'), function(){
